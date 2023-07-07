@@ -9,7 +9,6 @@ const NotesList = ({ notes, onDelete, userId }) => {
     .filter((note) => note.userId === userId)
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
-  console.log(userNotes);
    const handleClick = (noteId) => {
      navigate(`/view/${noteId}`);
      
