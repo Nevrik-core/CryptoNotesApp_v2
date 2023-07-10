@@ -5,11 +5,14 @@ import { auth } from "../services/firebase/config";
 import { createNote, fetchNotes, deleteNote } from "../services/firebase/notes";
 import HomePage from "pages/HomePage";
 import AuthPage from "pages/AuthPage";
+import ConfirmationModal from "./ConfirmationModal/ConfirmationModal";
 
 export const App = () => {
   const [user, setUser] = useState(null);
   const [notes, setNotes] = useState([]);
   const [shouldRefresh, setShouldRefresh] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [noteToDelete, setNoteToDelete] = useState(null);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -49,7 +52,28 @@ export const App = () => {
     .catch((error) => {
       console.error("Error deleting note: ", error);
     });
-};
+  };
+  
+   const handleDeleteClick = (userId, noteId) => {
+    setNoteToDelete({ userId, noteId });
+    setModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    const { userId, noteId } = noteToDelete;
+    deleteNote(userId, noteId)
+      .then(() => {
+        setNotes(notes.filter((note) => note.id !== noteId));
+      })
+      .catch((error) => {
+        console.error("Error deleting note: ", error);
+      });
+    setModalOpen(false);
+  };
+
+  const handleCancelDelete = () => {
+    setModalOpen(false);
+  };
 
   return (
     <>
@@ -59,12 +83,17 @@ export const App = () => {
           handleNoteCreated={handleNoteCreated}
           user={user}
           setUser={setUser}
-          onDelete={handleNoteDeleted}
+          onDelete={handleDeleteClick}
           setNotes={setNotes}
         />
       ) : (
         <AuthPage />
       )}
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </>
   );
 };
