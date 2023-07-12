@@ -21,15 +21,15 @@ const NotePage = ({ notes }) => {
     
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 60px)", padding: "10px" }}>
-            <h1 style={{ textAlign: "center", margin: 0, marginBottom: "5px", color: theme.colors.dark }}>{selectedNote.title}</h1>
+            <h1 style={{ textAlign: "center", margin: 0, marginBottom: "5px", color: theme.colors.light }}>{selectedNote.title}</h1>
         <p style={{
           flexGrow: 1,
           marginBottom: "10px",
           padding: "10px",
           fontSize: "16px",
-          backgroundColor: theme.colors.yellow,
+          backgroundColor: theme.colors.lightGrey,
           borderRadius: "5px",
-          color: theme.colors.dark,
+          color: theme.colors.light,
           boxShadow: theme.effects.dropShadow,
           overflowWrap: "break-word"
         }}>{selectedNote.content}</p>

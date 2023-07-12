@@ -32,7 +32,7 @@ const EditNote = ({ notes, onUpdate }) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 60px)", padding: "10px" }}>
-      <h1 style={{ textAlign: "center", margin: 0, marginBottom: "5px", color: theme.colors.dark }}>Edit note</h1>
+      <h1 style={{ textAlign: "center", margin: 0, marginBottom: "5px", color: theme.colors.light }}>Edit note</h1>
       <input
         type="text"
         value={title}

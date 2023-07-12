@@ -3,6 +3,7 @@
 
 
 body {
+  background-color: #282728;
   margin: 0;
   font-family: 'Titillium Web', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -16,4 +17,6 @@ code {
 
 button, input, textarea {
   font-family: 'Titillium Web', sans-serif;
+  background-color: #3a393a;
+  color: #FFFFFF;
 }
