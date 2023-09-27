@@ -43,16 +43,6 @@ export const App = () => {
       console.error("Error creating note: ", error);
     }
   };
-
-  const handleNoteDeleted = (userId, noteId) => {
-  deleteNote(userId, noteId)
-    .then(() => {
-      setNotes(notes.filter((note) => note.id !== noteId));
-    })
-    .catch((error) => {
-      console.error("Error deleting note: ", error);
-    });
-  };
   
    const handleDeleteClick = (userId, noteId) => {
     setNoteToDelete({ userId, noteId });

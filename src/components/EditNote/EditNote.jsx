@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import theme from 'constants/theme';
+import useWordAndCharCount from 'hooks/useWordAndCharCount';
+
+import {
+  EditWrapper,
+  EditHeader,
+  StyledInput,
+  StyledTextarea,
+  StyledInfo,
+  ButtonGroup,
+  BackButton,
+  SaveButton
+} from './EditNote.styled';
+
+
 
 const EditNote = ({ notes, onUpdate }) => {
   const { noteId } = useParams();
@@ -8,14 +21,15 @@ const EditNote = ({ notes, onUpdate }) => {
   const note = notes.find((n) => n.id === noteId);
 
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
+
+  const { content, setContent, wordCount, charCount, handleContentChange } = useWordAndCharCount();
 
   useEffect(() => {
     if (note) {
       setTitle(note.title);
-      setContent(note.content);
+      handleContentChange(note.content);
     }
-  }, [note]);
+  }, [note, handleContentChange]);
 
   const handleSave = () => {
     onUpdate(noteId, { title, content });
@@ -31,24 +45,23 @@ const EditNote = ({ notes, onUpdate }) => {
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 60px)", padding: "10px" }}>
-      <h1 style={{ textAlign: "center", margin: 0, marginBottom: "5px", color: theme.colors.light }}>Edit note</h1>
-      <input
+    <EditWrapper>
+      <EditHeader>Edit note</EditHeader>
+      <StyledInput
         type="text"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        style={{ marginBottom: "10px", padding: "10px", fontSize: "16px" }}
       />
-      <textarea
+      <StyledTextarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        style={{ flexGrow: 1, marginBottom: "10px", padding: "10px", fontSize: "16px" }}
-      ></textarea>
-      <div style={{ display: 'flex' }}>
-        <button onClick={handleBack} style={{ flexGrow: 1, marginRight: "5px", padding: "10px", backgroundColor: "#dc3545", color: "white", border: "none", borderRadius: "5px", fontSize: "16px" }}>Back</button>
-        <button onClick={handleSave} style={{ flexGrow: 1, marginLeft: "5px", padding: "10px", backgroundColor: "#007bff", color: "white", border: "none", borderRadius: "5px", fontSize: "16px" }}>Save</button>
-      </div>
-    </div>
+      ></StyledTextarea>
+        <StyledInfo>Characters: {charCount} | Words: {wordCount}</StyledInfo>
+      <ButtonGroup style={{ display: 'flex' }}>
+        <BackButton onClick={handleBack}>Back</BackButton>
+        <SaveButton onClick={handleSave}>Save</SaveButton>
+      </ButtonGroup>
+    </EditWrapper>
   );
 };
 
