@@ -2,6 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import theme from "constants/theme";
+import { NotesContainer, Header, SubText, StyledLink, NotesListContainer, NoteItem, NoteTitle, NoteContent, NoteDate, DeleteButton } from './NotesList.styled';
+
 
 const NotesList = ({ notes, onDelete, userId }) => {
   const navigate = useNavigate();
@@ -14,39 +16,24 @@ const NotesList = ({ notes, onDelete, userId }) => {
   };
 
  return (
-  <div style={{ width: "100%", padding: "20px", overflowX: "hidden", boxSizing: "border-box" }}>
-    <h1 style={{ textAlign: "center", color: theme.colors.yellow, margin: "0" }}>Welcome to the encrypted notes</h1>
-    <p style={{fontSize: "12px", textAlign: "center", color: theme.colors.yellow}}>All your notes will be encrypted, and only you can see the decrypted version.</p>
-    <Link to="/create"></Link>
-    <ul style={{ listStyle: "none", padding: 0 }}>
+  <NotesContainer>
+    <Header>Welcome to the encrypted notes</Header>
+    <SubText>All your notes will be encrypted, and only you can see the decrypted version.</SubText>
+    <StyledLink to="/create"></StyledLink>
+    <NotesListContainer>
       {userNotes.map((note) => (
-        <li
+        <NoteItem
           key={note.id}
           onClick={() => handleClick(note.id)}
-          style={{
-            marginBottom: "20px",
-    backgroundColor: theme.colors.lightGrey,
-    borderRadius: "4px",
-    boxShadow: theme.effects.dropShadow,
-    padding: "10px",
-    cursor: "pointer",
-          }}
         >
-          <h2 style={{color: theme.colors.light}}>{note.title}</h2>
-          <p style={{ 
-            color: theme.colors.light,
-            whiteSpace: "nowrap", 
-            overflow: "hidden", 
-            textOverflow: "ellipsis" 
-          }}>
-            {note.content}
-          </p>
-          <p style={{fontSize: "10px", color: theme.colors.light}}>{note.createdAt ? `${note.createdAt.toDateString()} ${note.createdAt.toLocaleTimeString()}` : "N/A"}</p>
-          <button style={{backgroundColor: 'red', color: 'white', border: 'none', borderRadius: '5px'}} onClick={(e) => { e.stopPropagation(); onDelete(userId, note.id) }}>Delete</button>
-        </li>
+          <NoteTitle>{note.title}</NoteTitle>
+          <NoteContent>{note.content}</NoteContent>
+          <NoteDate>{note.createdAt ? `${note.createdAt.toDateString()} ${note.createdAt.toLocaleTimeString()}` : "N/A"}</NoteDate>
+          <DeleteButton onClick={(e) => { e.stopPropagation(); onDelete(userId, note.id) }}>Delete</DeleteButton>
+        </NoteItem>
       ))}
-    </ul>
-  </div>
+    </NotesListContainer>
+  </NotesContainer>
 );
 
 };
