@@ -49,7 +49,7 @@ export const HomePage = ({
 
       <ContentContainer>
         <Routes>
-        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/calendar" element={<Calendar userId={user.uid}/>} />
 
           <Route
             path="/notes"

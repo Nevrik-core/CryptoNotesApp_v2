@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, getFirestore, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { collection, getDoc, setDoc, addDoc, getDocs, getFirestore, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import CryptoJS from "crypto-js";
 
 const key = process.env.REACT_APP_ENCRYPTION_KEY;
@@ -76,4 +76,57 @@ export const deleteNote = async (userId, noteId) => {
   } catch (error) {
     console.error("Error deleting note: ", error);
   }
+};
+
+//сохранение цвета для даты
+//сохранение цвета для даты
+export const setColorForDate = async (userId, date, color) => {
+  const db = getFirestore();
+  const dateColorRef = doc(db, "users", userId, "calendarColors", date); // используем дату как ID документа
+  try {
+    await updateDoc(dateColorRef, { color });
+  } catch (error) {
+    if (error.code === "not-found") {
+      // Если документ не найден, создаем его
+      await setDoc(dateColorRef, { color });
+    } else {
+      console.error("Error saving color for date: ", error);
+    }
+  }
+};
+
+
+
+//получение цвета для даты
+export const getColorForDate = async (userId, date) => {
+  const db = getFirestore();
+  const dateColorRef = doc(db, "users", userId, "calendarColors", date);
+  try {
+    const docData = await getDocs(dateColorRef);
+    if (docData.exists()) {
+      return docData.data().color;
+    }
+  } catch (error) {
+    console.error("Error fetching color for date: ", error);
+  }
+  return null; // Возвращаем null, если документ не существует или произошла ошибка
+};
+
+
+
+//получение цветов для всех дат
+export const getAllColors = async (userId) => {
+  const db = getFirestore();
+  const colorsCollection = collection(db, "users", userId, "calendarColors");
+  const colors = {};
+  try {
+    const snapshot = await getDocs(colorsCollection);
+    snapshot.forEach((doc) => {
+      colors[doc.id] = doc.data().color; // doc.id будет датой
+    });
+    
+  } catch (error) {
+    console.error("Error fetching colors: ", error);
+  }
+  return colors;
 };

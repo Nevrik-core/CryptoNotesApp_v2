@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { CalendarContainer, CalendarHeader, DaysOfWeekContainer, DayOfWeek, DaysOfMonthContainer, DayOfMonth } from './Calendar.styled';
+import React, { useState, useEffect } from 'react';
+import { CalendarContainer, CalendarHeader, DaysOfWeekContainer, DayOfWeek, DaysOfMonthContainer, DayOfMonth, DateContainer } from './Calendar.styled';
+import { getAllColors, setColorForDate } from 'services/firebase/notes';
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-const Calendar = () => {
+const Calendar = ({userId}) => {
+
+    const today = new Date();
+    const currentDay = today.getDate();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+
+   
 
     const colors = [
         'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'black', 'white' 
@@ -14,14 +22,32 @@ const Calendar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [dayColors, setDayColors] = useState({}); // для хранения цветов по датам
 
-    const handleColorSelect = (color) => {
-        setDayColors(prev => ({
-            ...prev,
-            [selectedDate.toDateString()]: color
-        }));
-        setIsMenuOpen(false);
+    const handleNewNote = () => {
+        // Ваша логика для добавления новой заметки
+        setIsMenuOpen(false); // Закрыть меню после завершения действия (если необходимо)
+    };
+    
+    const handleGoToNotes = () => {
+        // Ваша логика для перехода к списку заметок или их отображения
+        setIsMenuOpen(false); // Закрыть меню после завершения действия (если необходимо)
     };
 
+    const handleColorSelect = async (color) => {
+        if (color === null) {
+            const newColors = { ...dayColors };
+            delete newColors[selectedDate.toDateString()];
+            setDayColors(newColors);
+        } else {
+            setDayColors(prev => ({
+                ...prev,
+                [selectedDate.toDateString()]: color
+            }));
+        }
+        setIsMenuOpen(false);
+        await setColorForDate(userId, selectedDate.toDateString(), color);
+        
+    };
+    
     const handleDayClick = (date) => {
         setSelectedDate(date);
         setIsMenuOpen(true);
@@ -33,6 +59,8 @@ const Calendar = () => {
         const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     
         const days = [];
+
+        
     
         // Добавляем дни из предыдущего месяца
         for (let i = 0; i < startDay - 1; i++) {
@@ -52,10 +80,13 @@ const Calendar = () => {
             const day = new Date(date.getFullYear(), date.getMonth() + 1, i);
             days.push(day);
         }
+        
     
         return days;
     };
     
+
+    const daysOfMonth = generateDaysOfMonth(currentDate);
 
     const handleNextMonth = () => {
         const newDate = new Date(currentDate);
@@ -68,6 +99,23 @@ const Calendar = () => {
         newDate.setMonth(currentDate.getMonth() - 1);
         setCurrentDate(newDate);
     };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setCurrentDate(new Date());
+        }, 60000); // проверять каждую минуту
+      
+        return () => clearInterval(interval); // очистка при размонтировании компонента
+      }, []);
+
+      useEffect(() => {
+        // При монтировании компонента загрузим все цвета для этого пользователя
+        const loadColors = async () => {
+            const loadedColors = await getAllColors(userId); // предположим, что у вас есть userId
+            setDayColors(loadedColors);
+        }
+        loadColors();
+    }, []);
 
     return (
         <CalendarContainer>
@@ -83,14 +131,21 @@ const Calendar = () => {
             </DaysOfWeekContainer>
             <DaysOfMonthContainer>
                  {generateDaysOfMonth(currentDate).map((day, index) => (
-                   <DayOfMonth 
+                   <DayOfMonth
+                    
                    style={{backgroundColor: dayColors[day.toDateString()] || (day.getMonth() === currentDate.getMonth() ? '#3e3e3e' : '#2e2e2e')}}
                    key={index} 
                    isActiveMonth={day.getMonth() === currentDate.getMonth()}
                    onClick={() => handleDayClick(day)}
+                   isToday={day.getDate() === currentDay && day.getMonth() === currentMonth && day.getFullYear() === currentYear}
+
                >
-                   {day.getDate()}
+                   <DateContainer>
+                       {day.getDate()}
+                   </DateContainer>
                </DayOfMonth>
+               
+                
                
     ))}
 </DaysOfMonthContainer>
@@ -101,10 +156,27 @@ const Calendar = () => {
         key={color} 
         style={{backgroundColor: color, width: '20px', height: '20px'}}
         onClick={() => handleColorSelect(color)}
-    />
+    />   
 ))}
-
+        <button 
+    key="no-color" 
+    style={{backgroundColor: 'transparent', width: '20px', height: '20px', border: '1px solid #000'}}
+    onClick={() => handleColorSelect(null)}
+/>
         <button onClick={() => setIsMenuOpen(false)}>Закрыть</button>
+        <button 
+    style={{width: '20px', height: '20px', margin: '5px', border: '1px solid #000'}}
+    onClick={handleNewNote}
+>
+    New Note
+</button>
+<button 
+    style={{width: '20px', height: '20px', margin: '5px', border: '1px solid #000'}}
+    onClick={handleGoToNotes}
+>
+    Go to Notes
+</button>
+
     </div>
 )}
 
