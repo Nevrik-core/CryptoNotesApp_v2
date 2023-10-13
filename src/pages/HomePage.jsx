@@ -7,6 +7,7 @@ import NotePage from "./NotePage";
 import EditNote from "components/EditNote/EditNote";
 import { updateNote, fetchNotes } from "../services/firebase/notes";
 import { FiLogOut } from "react-icons/fi";
+import Calendar from "components/Calendar/Calendar";
 
 
 import { Navbar, BottomMenu, BottomStyledNavLink, TopStyledNavLink, SignOutButton, ContentContainer } from "./HomePage.styled";
@@ -48,6 +49,8 @@ export const HomePage = ({
 
       <ContentContainer>
         <Routes>
+        <Route path="/calendar" element={<Calendar />} />
+
           <Route
             path="/notes"
             element={
