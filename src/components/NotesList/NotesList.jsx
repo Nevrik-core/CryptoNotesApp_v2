@@ -1,7 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import theme from "constants/theme";
 import { NotesContainer, Header, SubText, StyledLink, NotesListContainer, NoteItem, NoteTitle, NoteContent, NoteDate, DeleteButton } from './NotesList.styled';
 
 

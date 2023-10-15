@@ -21,7 +21,9 @@ export const SubText = styled.p`
   color: ${theme.colors.yellow};
 `;
 
-export const StyledLink = styled(Link)``; // если нужно добавить стили для этой ссылки, здесь правильное место
+export const StyledLink = styled(Link)`
+
+`;
 
 export const NotesListContainer = styled.ul`
   list-style: none;

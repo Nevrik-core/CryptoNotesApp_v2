@@ -79,7 +79,6 @@ export const deleteNote = async (userId, noteId) => {
 };
 
 //сохранение цвета для даты
-//сохранение цвета для даты
 export const setColorForDate = async (userId, date, color) => {
   const db = getFirestore();
   const dateColorRef = doc(db, "users", userId, "calendarColors", date); // используем дату как ID документа

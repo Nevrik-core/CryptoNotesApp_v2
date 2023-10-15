@@ -13,8 +13,8 @@ const Calendar = ({userId}) => {
    
 
     const colors = [
-        'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'black', 'white' 
-        // ... добавьте остальные основные цвета и оттенки
+        'red', 'tomato', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'black', 'white' 
+        
     ];
 
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -23,13 +23,11 @@ const Calendar = ({userId}) => {
     const [dayColors, setDayColors] = useState({}); // для хранения цветов по датам
 
     const handleNewNote = () => {
-        // Ваша логика для добавления новой заметки
-        setIsMenuOpen(false); // Закрыть меню после завершения действия (если необходимо)
+        setIsMenuOpen(false); 
     };
     
     const handleGoToNotes = () => {
-        // Ваша логика для перехода к списку заметок или их отображения
-        setIsMenuOpen(false); // Закрыть меню после завершения действия (если необходимо)
+        setIsMenuOpen(false); 
     };
 
     const handleColorSelect = async (color) => {
@@ -109,9 +107,9 @@ const Calendar = ({userId}) => {
       }, []);
 
       useEffect(() => {
-        // При монтировании компонента загрузим все цвета для этого пользователя
+        // При монтировании компонента загружаем все цвета для этого пользователя
         const loadColors = async () => {
-            const loadedColors = await getAllColors(userId); // предположим, что у вас есть userId
+            const loadedColors = await getAllColors(userId); 
             setDayColors(loadedColors);
         }
         loadColors();
