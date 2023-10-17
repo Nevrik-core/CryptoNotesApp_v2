@@ -113,7 +113,7 @@ const Calendar = ({userId}) => {
             setDayColors(loadedColors);
         }
         loadColors();
-    }, []);
+    }, [userId]);
 
     return (
         <CalendarContainer>

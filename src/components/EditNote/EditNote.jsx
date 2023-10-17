@@ -22,14 +22,14 @@ const EditNote = ({ notes, onUpdate }) => {
 
   const [title, setTitle] = useState('');
 
-  const { content, setContent, wordCount, charCount, handleContentChange } = useWordAndCharCount();
+  const { content, setContent, wordCount, charCount, handleContentChange } = useWordAndCharCount(note ? note.content : "");
 
   useEffect(() => {
     if (note) {
       setTitle(note.title);
-      handleContentChange(note.content);
+      setContent(note.content);;
     }
-  }, [note, handleContentChange]);
+  }, [note, setContent]);
 
   const handleSave = () => {
     onUpdate(noteId, { title, content });
@@ -54,7 +54,7 @@ const EditNote = ({ notes, onUpdate }) => {
       />
       <StyledTextarea
         value={content}
-        onChange={(e) => setContent(e.target.value)}
+        onChange={(e) => handleContentChange(e.target.value)}
       ></StyledTextarea>
         <StyledInfo>Characters: {charCount} | Words: {wordCount}</StyledInfo>
       <ButtonGroup style={{ display: 'flex' }}>
