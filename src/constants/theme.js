@@ -15,7 +15,8 @@ const theme = {
     dark: '#343a40',
     },
     effects: {
-        dropShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
+      dropShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
+      dropShortShadow: "2px 2px 5px rgba(0, 0, 0, 0.6)",
     },
   fonts: {
     primary: "'Titillium Web', sans-serif",

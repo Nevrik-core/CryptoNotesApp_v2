@@ -46,3 +46,17 @@ export const ModalButton = styled.button`
     background-color: ${theme.colors.blue};
   }
 `;
+
+
+export const ActionButton = styled.button`
+    width: 80%; // Большая ширина для удобства использования
+    padding: 10px;
+    margin: 5px 0; // Пространство сверху и снизу кнопки
+    border: 1px solid #ccc; // Граница для видимости на белом фоне
+    border-radius: 5px;
+    background-color: transparent;
+    cursor: pointer;
+    &:hover {
+        background-color: #f8f8f8; // Эффект при наведении
+    }
+`;

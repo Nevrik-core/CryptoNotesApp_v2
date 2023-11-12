@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import theme from 'constants/theme';
 
 export const CalendarContainer = styled.div`
     height: calc(100vh - 120px);
@@ -71,6 +72,7 @@ export const DayOfMonth = styled.div`
     height: 25px; 
     border-radius: 50%;
     background-color: red;
+    box-shadow: ${theme.effects.dropShortShadow};
 }
 `;
 
@@ -82,4 +84,78 @@ export const DateContainer = styled.div`
     align-items: flex-end;
     justify-content: flex-end;
     width: 100%;
+`;
+
+
+
+
+export const ColorPickerContainer = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 15px;
+    z-index: 10;
+    width: 60%;
+`;
+
+export const ColorButton = styled.button`
+    background-color: ${props => props.color};
+    width: 50px; 
+    height: 50px; 
+    border: solid 2px black;
+    border-radius: 50%; 
+    cursor: pointer;
+    &:hover {
+        opacity: 0.8; 
+    }
+`;
+
+export const CloseButton = styled.button`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #333;
+`;
+
+export const ActionsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: 100%; 
+`;
+
+export const ActionButton = styled.button`
+    width: 80%; 
+    padding: 10px;
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: transparent;
+    color: black;
+    cursor: pointer;
+    &:hover {
+        background-color: #f8f8f8;
+    }
+`;
+
+export const Overlay = styled.div`
+  display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); 
+  z-index: 5;
 `;

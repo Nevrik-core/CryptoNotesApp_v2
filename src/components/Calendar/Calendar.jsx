@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { CalendarContainer, CalendarHeader, DaysOfWeekContainer, DayOfWeek, DaysOfMonthContainer, DayOfMonth, DateContainer } from './Calendar.styled';
+import React, { useState, useEffect, useRef } from 'react';
+import { CalendarContainer, CalendarHeader, DaysOfWeekContainer, DayOfWeek, DaysOfMonthContainer, DayOfMonth, DateContainer, ColorPickerContainer, ColorButton, CloseButton, ActionsContainer, ActionButton, Overlay } from './Calendar.styled';
 import { getAllColors, setColorForDate } from 'services/firebase/notes';
+import { useLocation } from 'react-router-dom';
+
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const Calendar = ({userId}) => {
@@ -10,10 +12,11 @@ const Calendar = ({userId}) => {
     const currentMonth = today.getMonth();
     const currentYear = today.getFullYear();
 
+    const location = useLocation();
    
 
     const colors = [
-        'red', 'tomato', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'black', 'white' 
+        'red', 'tomato', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'black', 
         
     ];
 
@@ -46,7 +49,8 @@ const Calendar = ({userId}) => {
         
     };
     
-    const handleDayClick = (date) => {
+    const handleDayClick = (e, date) => {
+        e.stopPropagation()
         setSelectedDate(date);
         setIsMenuOpen(true);
     };
@@ -99,12 +103,20 @@ const Calendar = ({userId}) => {
     };
 
     useEffect(() => {
-        const interval = setInterval(() => {
-          setCurrentDate(new Date());
-        }, 60000); // проверять каждую минуту
-      
-        return () => clearInterval(interval); // очистка при размонтировании компонента
-      }, []);
+
+        const updateCurrentDate = () => {
+            setCurrentDate(new Date());
+        };
+
+        
+         if (location.pathname === '/calendar') {
+            const interval = setInterval(updateCurrentDate, 6000000);
+
+            updateCurrentDate();
+
+        return () => clearInterval(interval);
+        }
+    }, [location]);
 
       useEffect(() => {
         // При монтировании компонента загружаем все цвета для этого пользователя
@@ -115,8 +127,41 @@ const Calendar = ({userId}) => {
         loadColors();
     }, [userId]);
 
+    useEffect(() => {
+    const closeOnEscapeKeyDown = (e) => {
+        if ((e.charCode || e.keyCode) === 27) {
+            setIsMenuOpen(false);
+        }
+    };
+        
+
+    document.body.addEventListener('keydown', closeOnEscapeKeyDown);
+    return () => {
+        document.body.removeEventListener('keydown', closeOnEscapeKeyDown);
+    };
+    }, []);
+
+    const menuRef = useRef(null);
+    useEffect(() => {
+        const closeOnClickOutside = (e) => {
+            if (menuRef.current && !menuRef.current.contains(e.target)) {
+                 setIsMenuOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', closeOnClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', closeOnClickOutside);
+        };
+    }, []);
+
+    
+
+
+
     return (
         <CalendarContainer>
+            <Overlay isOpen={isMenuOpen} onClick={() => setIsMenuOpen(false)} />
             <CalendarHeader>
                 <button onClick={handlePrevMonth}>{"<"}</button>
                 {currentDate.toLocaleString('default', { month: 'long' })} {currentDate.getFullYear()}
@@ -128,55 +173,40 @@ const Calendar = ({userId}) => {
                 ))}
             </DaysOfWeekContainer>
             <DaysOfMonthContainer>
-                 {generateDaysOfMonth(currentDate).map((day, index) => (
-                   <DayOfMonth
-                    
-                   style={{backgroundColor: dayColors[day.toDateString()] || (day.getMonth() === currentDate.getMonth() ? '#3e3e3e' : '#2e2e2e')}}
-                   key={index} 
-                   isActiveMonth={day.getMonth() === currentDate.getMonth()}
-                   onClick={() => handleDayClick(day)}
-                   isToday={day.getDate() === currentDay && day.getMonth() === currentMonth && day.getFullYear() === currentYear}
+                {generateDaysOfMonth(currentDate).map((day, index) => (
+                    <DayOfMonth
+                        
+                        style={{backgroundColor: dayColors[day.toDateString()] || (day.getMonth() === currentDate.getMonth() ? '#3e3e3e' : '#2e2e2e')}}
+                        key={index} 
+                        isActiveMonth={day.getMonth() === currentDate.getMonth()}
+                        onClick={(e) => handleDayClick(e, day)}
+                        isToday={day.getDate() === currentDay && day.getMonth() === currentMonth && day.getFullYear() === currentYear}>
+                        <DateContainer>
+                            {day.getDate()}
+                        </DateContainer>
+                    </DayOfMonth>
+                    ))}
+            </DaysOfMonthContainer>
+            {isMenuOpen && (
+                <ColorPickerContainer ref={menuRef}>
+                    {colors.map(color => (
+                        <ColorButton 
+                            key={color} 
+                            color={color}
+                            onClick={() => handleColorSelect(color)}
+                        />   
+                    ))}
+                    <ActionButton 
+                        key="no-color" 
+                        onClick={() => handleColorSelect(null)}>Clear Color</ActionButton>
+                    <ActionsContainer>
+                        <ActionButton onClick={handleNewNote}>New Note</ActionButton>
+                        <ActionButton onClick={handleGoToNotes}>Go to Notes</ActionButton>
+                    </ActionsContainer>
+                    <ActionButton onClick={() => setIsMenuOpen(false)}>Закрыть</ActionButton>
 
-               >
-                   <DateContainer>
-                       {day.getDate()}
-                   </DateContainer>
-               </DayOfMonth>
-               
-                
-               
-    ))}
-</DaysOfMonthContainer>
-{isMenuOpen && (
-    <div style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: 'white', padding: '20px', borderRadius: '10px'}}>
-        {colors.map(color => (
-    <button 
-        key={color} 
-        style={{backgroundColor: color, width: '20px', height: '20px'}}
-        onClick={() => handleColorSelect(color)}
-    />   
-))}
-        <button 
-    key="no-color" 
-    style={{backgroundColor: 'transparent', width: '20px', height: '20px', border: '1px solid #000'}}
-    onClick={() => handleColorSelect(null)}
-/>
-        <button onClick={() => setIsMenuOpen(false)}>Закрыть</button>
-        <button 
-    style={{width: '20px', height: '20px', margin: '5px', border: '1px solid #000'}}
-    onClick={handleNewNote}
->
-    New Note
-</button>
-<button 
-    style={{width: '20px', height: '20px', margin: '5px', border: '1px solid #000'}}
-    onClick={handleGoToNotes}
->
-    Go to Notes
-</button>
-
-    </div>
-)}
+                </ColorPickerContainer>
+                )}
 
         </CalendarContainer>
     );

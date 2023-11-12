@@ -18,4 +18,5 @@ export const StyledAuthButton = styled.button`
     padding: 10px 20px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     border: none;
+    cursor: pointer;
 `
