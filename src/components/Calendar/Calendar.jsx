@@ -34,18 +34,21 @@ const Calendar = ({userId}) => {
     };
 
     const handleColorSelect = async (color) => {
-        if (color === null) {
-            const newColors = { ...dayColors };
-            delete newColors[selectedDate.toDateString()];
-            setDayColors(newColors);
-        } else {
-            setDayColors(prev => ({
-                ...prev,
-                [selectedDate.toDateString()]: color
-            }));
-        }
-        setIsMenuOpen(false);
-        await setColorForDate(userId, selectedDate.toDateString(), color);
+        setDayColors(prevColors => {
+            const currentColors = prevColors[selectedDate.toDateString()] || [];
+            let newColors;
+            if (currentColors.includes(color)) {
+                //Удаляю цвет
+                newColors = currentColors.filter(c => c !== color);
+            } else {
+                //Добавляю цвет
+                newColors = [...currentColors, color];
+            }
+            setColorForDate(userId, selectedDate.toDateString(), newColors);
+            return { ...prevColors, [selectedDate.toDateString()]: newColors };
+        });
+        
+        
         
     };
     
@@ -175,7 +178,8 @@ const Calendar = ({userId}) => {
             <DaysOfMonthContainer>
                 {generateDaysOfMonth(currentDate).map((day, index) => (
                     <DayOfMonth
-                        
+                        dayColors={dayColors}
+                        date={day.toDateString()}
                         style={{backgroundColor: dayColors[day.toDateString()] || (day.getMonth() === currentDate.getMonth() ? '#3e3e3e' : '#2e2e2e')}}
                         key={index} 
                         isActiveMonth={day.getMonth() === currentDate.getMonth()}
@@ -193,6 +197,7 @@ const Calendar = ({userId}) => {
                         <ColorButton 
                             key={color} 
                             color={color}
+                            isSelected={dayColors[selectedDate.toDateString()]?.includes(color)}
                             onClick={() => handleColorSelect(color)}
                         />   
                     ))}

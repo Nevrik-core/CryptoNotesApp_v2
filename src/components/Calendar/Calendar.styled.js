@@ -74,6 +74,11 @@ export const DayOfMonth = styled.div`
     background-color: red;
     box-shadow: ${theme.effects.dropShortShadow};
 }
+
+    background: ${({ dayColors, date }) =>
+    dayColors[date] && dayColors[date].length > 0
+      ? `linear-gradient(${dayColors[date].join(", ")})`
+      : "defaultBackgroundColor"};
 `;
 
 
@@ -116,6 +121,7 @@ export const ColorButton = styled.button`
     &:hover {
         opacity: 0.8; 
     }
+    border: ${props => props.isSelected ? "3px solid gold" : "solid 2px black"};
 `;
 
 export const CloseButton = styled.button`

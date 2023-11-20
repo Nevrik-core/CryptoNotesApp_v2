@@ -79,15 +79,15 @@ export const deleteNote = async (userId, noteId) => {
 };
 
 //сохранение цвета для даты
-export const setColorForDate = async (userId, date, color) => {
+export const setColorForDate = async (userId, date, colors) => {
   const db = getFirestore();
   const dateColorRef = doc(db, "users", userId, "calendarColors", date); // используем дату как ID документа
   try {
-    await updateDoc(dateColorRef, { color });
+    await updateDoc(dateColorRef, { colors });
   } catch (error) {
     if (error.code === "not-found") {
       // Если документ не найден, создаем его
-      await setDoc(dateColorRef, { color });
+      await setDoc(dateColorRef, { colors });
     } else {
       console.error("Error saving color for date: ", error);
     }
@@ -103,7 +103,7 @@ export const getColorForDate = async (userId, date) => {
   try {
     const docData = await getDocs(dateColorRef);
     if (docData.exists()) {
-      return docData.data().color;
+      return docData.data().colors;
     }
   } catch (error) {
     console.error("Error fetching color for date: ", error);
@@ -121,7 +121,7 @@ export const getAllColors = async (userId) => {
   try {
     const snapshot = await getDocs(colorsCollection);
     snapshot.forEach((doc) => {
-      colors[doc.id] = doc.data().color; // doc.id будет датой
+      colors[doc.id] = doc.data().colors; // doc.id будет датой
     });
     
   } catch (error) {
