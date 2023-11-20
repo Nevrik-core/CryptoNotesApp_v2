@@ -60,7 +60,26 @@ export const DayOfMonth = styled.div`
     justify-content: flex-end;
     padding: 8px;
 
-    position: relative;
+    background: ${({ dayColors, date }) => {
+    const colors = dayColors[date];
+    if (colors && colors.length > 0) {
+      // Создаем градиент с вертикальными полосами
+      let gradient = 'linear-gradient(to right';
+      colors.forEach((color, index) => {
+        // Добавляем каждый цвет на соответствующую позицию
+        const start = index * 10; // Начало полосы
+        const end = start + 10; // Конец полосы
+        gradient += `, ${color} ${start}%, ${color} ${end}%`;
+      });
+      gradient += ')';
+      return gradient;
+    }
+    return 'defaultBackgroundColor'; // Замените на ваш фоновый цвет по умолчанию
+  }};
+
+  &:hover {
+    background-color: #4e4e4e;
+  }
 
     &::before {
     content: "${props => (props.isToday ? '' : '')}";
@@ -75,10 +94,7 @@ export const DayOfMonth = styled.div`
     box-shadow: ${theme.effects.dropShortShadow};
 }
 
-    background: ${({ dayColors, date }) =>
-    dayColors[date] && dayColors[date].length > 0
-      ? `linear-gradient(${dayColors[date].join(", ")})`
-      : "defaultBackgroundColor"};
+    
 `;
 
 
