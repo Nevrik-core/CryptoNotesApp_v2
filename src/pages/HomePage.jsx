@@ -28,7 +28,6 @@ export const HomePage = ({
     setNotes(updatedNotes);
   };
 
-  const location = useLocation();
 
   return (
     <>
