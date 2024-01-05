@@ -2,16 +2,14 @@ import styled, { css } from 'styled-components';
 import theme from 'constants/theme';
 
 export const CalendarContainer = styled.div`
-    height: calc(100vh - 120px);
+    max-height: calc(100vh - 120px);
     display: flex;
     flex-direction: column; 
     background-color: #2e2e2e;
     padding: 15px;
     border-radius: 10px;
     margin: 0 auto;
-    @media (max-width: 512px) {
-        height: calc(100vh - 200px);
-    }
+    
 `;
 
 export const CalendarHeaderStyled = styled.div`
