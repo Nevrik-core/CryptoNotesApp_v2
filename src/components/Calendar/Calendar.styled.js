@@ -10,7 +10,7 @@ export const CalendarContainer = styled.div`
     border-radius: 10px;
     margin: 0 auto;
     @media (max-width: 512px) {
-        height: calc(100vh - 160px);
+        height: calc(100vh - 200px);
     }
 `;
 
