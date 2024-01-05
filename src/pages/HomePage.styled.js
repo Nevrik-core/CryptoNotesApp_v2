@@ -20,6 +20,7 @@ export const BottomMenu = styled.div`
   padding: 10px 20px;
   align-items: center;
   box-sizing: border-box;
+  z-index: 100;
 `;
 
 export const TopStyledNavLink = styled(NavLink)`
