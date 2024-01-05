@@ -9,6 +9,9 @@ export const CalendarContainer = styled.div`
     padding: 15px;
     border-radius: 10px;
     margin: 0 auto;
+    @media (max-width: 512px) {
+        height: calc(100vh - 160px);
+    }
 `;
 
 export const CalendarHeaderStyled = styled.div`
