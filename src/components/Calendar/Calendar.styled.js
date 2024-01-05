@@ -2,7 +2,8 @@ import styled, { css } from 'styled-components';
 import theme from 'constants/theme';
 
 export const CalendarContainer = styled.div`
-    max-height: calc(100vh - 120px);
+    min-height: calc(100vh - 120px);
+    height: auto;
     display: flex;
     flex-direction: column; 
     background-color: #2e2e2e;
