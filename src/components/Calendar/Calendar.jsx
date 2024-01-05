@@ -55,6 +55,7 @@ const Calendar = ({ userId }) => {
     }, []);
 
     const menuRef = useRef(null);
+
     useEffect(() => {
         const closeOnClickOutside = (e) => {
             if (menuRef.current && !menuRef.current.contains(e.target)) {
@@ -68,11 +69,29 @@ const Calendar = ({ userId }) => {
         };
     }, []);
 
-    
+    useEffect(() => {
+        const adjustCalendarHeight = () => {
+            const calendar = document.querySelector('#calendar-container');
+            const browserUIHeight = 120; 
+            const windowHeight = window.innerHeight;
+            const adjustedHeight = windowHeight - browserUIHeight;
+            calendar.style.height = `${adjustedHeight}px`;
+        };
+
+        window.addEventListener('load', adjustCalendarHeight);
+        window.addEventListener('resize', adjustCalendarHeight);
+
+        adjustCalendarHeight();
+
+        return () => {
+            window.removeEventListener('load', adjustCalendarHeight);
+            window.removeEventListener('resize', adjustCalendarHeight);
+        };
+    }, []);    
 
 
     return (
-        <CalendarContainer>
+        <CalendarContainer id="calendar-container">
             {isMenuOpen && <Overlay data-isopen={isMenuOpen} onClick={() => setIsMenuOpen(false)} />}
             < CalendarHeader
                 currentDate={currentDate}
