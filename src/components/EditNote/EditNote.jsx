@@ -31,10 +31,11 @@ const EditNote = ({ notes, onUpdate }) => {
     }
   }, [note, setContent]);
 
-  const handleSave = () => {
-    onUpdate(noteId, { title, content });
+  const handleSave = async () => {
+    await onUpdate(noteId, { title, content });
     navigate(`/view/${noteId}`);
   };
+
 
   const handleBack = () => {
     navigate("/notes");

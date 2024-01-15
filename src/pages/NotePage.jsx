@@ -3,8 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { PageContainer, NoteTitle, NoteContent, ButtonsContainer, StyledButton } from './NotePage.styled';
 
 const NotePage = ({ notes }) => {
+    
+    
     const navigate = useNavigate();
     const { noteId } = useParams();
+    
+    if (!Array.isArray(notes)) {
+        return <div>Loading...</div>;
+    }
     const selectedNote = notes.find((n) => n.id === noteId);
 
     const handleBack = () => {
@@ -15,9 +21,6 @@ const NotePage = ({ notes }) => {
         navigate(`/edit/${selectedNote.id}`);
     };
 
-    if (!selectedNote) {
-        return <div>Loading...</div>;
-    }
     
     return (
         <PageContainer >

@@ -7,6 +7,7 @@ const NotesList = ({ notes, onDelete, userId }) => {
   const navigate = useNavigate();
   const userNotes = notes
     .filter((note) => note.userId === userId)
+    .map(note => ({...note, createdAt: new Date(note.createdAt)}))
     .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
   const handleClick = (noteId) => {

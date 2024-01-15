@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { CalendarContainer, Overlay } from './Calendar.styled';
+import { getNotesForMonth } from 'services/firebase/notes';
 
 import CalendarHeader from './CalendarHeader';
 import DaysOfWeek from './DaysOfWeek';
@@ -10,7 +11,9 @@ import ColorPicker from './ColorPicker';
 
 
 const Calendar = ({ userId }) => {
-    
+    const [dayNotes, setDayNotes] = useState({});
+    const [currentMonth, setCurrentMonth] = useState('');
+
     const {
         currentDate,
         handleNextMonth,
@@ -26,7 +29,7 @@ const Calendar = ({ userId }) => {
 
 
     const colors = [
-        'red', 'tomato', 'orange', 'yellow', 'green', 'cornflowerblue', 'blue', 'indigo', 'violet', 'black', 
+        'red', 'tomato', 'orange', 'yellow', 'green', 'cornflowerblue', 'indigo', 'violet', 'black', 
         
     ];
     
@@ -89,6 +92,21 @@ const Calendar = ({ userId }) => {
         };
     }, []);    
 
+    useEffect(() => {
+    // Форматуємо поточну дату для отримання рядка місяця та року
+    const month = currentDate.getMonth();
+    const year = currentDate.getFullYear();
+
+    if (`${year}-${month}` !== currentMonth) {
+        const fetchNotesForMonth = async () => {
+            const monthNotes = await getNotesForMonth(userId, year, month);
+            setDayNotes(monthNotes);
+        };
+
+        fetchNotesForMonth();
+        setCurrentMonth(`${year}-${month}`);
+    }
+}, [currentDate, userId, currentMonth]);
 
     return (
         <CalendarContainer id="calendar-container">
@@ -100,15 +118,18 @@ const Calendar = ({ userId }) => {
             />
             <DaysOfWeek/>
             <MonthGrid
+                dayNotes={dayNotes}
                 daysOfMonth={daysOfMonth}
                 handleDayClick={handleDayClick}
                 currentDate={currentDate}
                 dayColors={dayColors}
             />
             {isMenuOpen && <ColorPicker
+                userId={userId}
                 ref={menuRef}
                 colors={colors}
-                selectedDate={selectedDate}
+                date={selectedDate}
+                initialNote={dayNotes[selectedDate.toDateString()] || ""}
                 handleColorSelect={handleColorSelect}
                 setIsMenuOpen={setIsMenuOpen}
                 selectedColors={dayColors[selectedDate.toDateString()] || []} />}

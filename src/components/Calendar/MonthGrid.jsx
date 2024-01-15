@@ -1,8 +1,8 @@
 import React from "react";
-import { DaysOfMonthContainer, DayOfMonth, DateContainer } from "./MonthGrid.styled";
+import { DaysOfMonthContainer, DayOfMonth, DateContainer, NoteText } from "./MonthGrid.styled";
 
 
-const MonthGrid = ({ daysOfMonth, handleDayClick, dayColors, currentDate }) => {
+const MonthGrid = ({ daysOfMonth, dayNotes, handleDayClick, dayColors, currentDate }) => {
     const today = new Date();
     const currentDay = today.getDate();
     const currentMonth = today.getMonth();
@@ -15,6 +15,7 @@ const MonthGrid = ({ daysOfMonth, handleDayClick, dayColors, currentDate }) => {
         const isActiveMonth = day.getMonth() === currentDate.getMonth();
         const isToday = day.getDate() === currentDay && day.getMonth() === currentMonth && day.getFullYear() === currentYear;
         const dateStr = day.toDateString();
+        const noteForDay = dayNotes[dateStr];
 
         return (
             <DayOfMonth
@@ -25,6 +26,7 @@ const MonthGrid = ({ daysOfMonth, handleDayClick, dayColors, currentDate }) => {
                 data-daycolors={dayColors}
                 onClick={(e) => handleDayClick(e, day)}>
             <DateContainer>{day.getDate()}</DateContainer>
+            {noteForDay && <NoteText title={noteForDay}>{noteForDay.slice(0, 32)}</NoteText>}
           </DayOfMonth>
         );
       })}

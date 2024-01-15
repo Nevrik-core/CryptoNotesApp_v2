@@ -55,3 +55,13 @@ export const ActionButton = styled.button`
         background-color: #f8f8f8;
     }
 `;
+
+export const StyledTextarea = styled.textarea`
+    flex-grow: 1;
+    color: black;
+    background-color: #f8f8f8;
+
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+`

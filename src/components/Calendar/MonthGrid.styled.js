@@ -22,7 +22,6 @@ export const DayOfMonth = styled.div`
     justify-content: flex-end;
     padding: 8px;
 
-    // Ваші стилі для активного місяця та сьогоднішнього дня вже інтегровані в логіку компонента
 
     &:hover {
         background-color: #4e4e4e;
@@ -69,4 +68,13 @@ export const DateContainer = styled.div`
 
     color: ${({ isToday }) => (isToday ? 'red' : 'inherit')};
     font-weight: ${({ isToday }) => (isToday ? 'bold' : 'normal')};
+`;
+
+export const NoteText = styled.div`
+    font-size: 2px; // Мінімальний розмір шрифту
+    color: #000; // Колір тексту
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; // Щоб текст не переносився на новий рядок
+    max-width: 100%; // Максимальна ширина тексту
 `;
