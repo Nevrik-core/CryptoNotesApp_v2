@@ -1,23 +1,39 @@
-Project Name: Calendar Notebook
-Description:
+# Calendar Notepad
 
-The Calendar Notebook is a web application designed for convenient note-taking with the ability to mark important dates on a calendar. Users can create, edit, and delete text notes, as well as assign color labels to them. This application helps organize time, plan tasks, and visualize a monthly schedule effectively.
+## Overview
 
-Key Features:
+Calendar Notepad is a web application designed to facilitate note-taking with
+the ability to mark important dates on a calendar. Users can create, edit, and
+delete text notes and assign color tags to them. This application aids in
+organizing time, planning tasks, and visualizing one's schedule for the month.
 
-Note Management: Allows creating, editing, and deleting text notes.
-Color Labeling: Users can assign color labels to notes for easy categorization.
-Calendar Visualization: Displays a calendar where users can select dates for notes, enhancing planning and organization.
-Color-Coded Notes in Calendar: Notes are visualized in the calendar with color labels, providing a quick overview of scheduled tasks.
-Note Content Encryption: Ensures the security of the note content with encryption, safeguarding personal data.
-Technologies Used:
+## Features
 
-React.js: The frontend of the application is developed using React.js, enabling an interactive user interface.
-Styled-Components: This application utilizes Styled-Components for component styling, encapsulating styles within each component.
-Firebase Firestore: Firestore from Firebase is used as a real-time database to store and manage notes and color labels.
-Firebase Authentication: Firebase Authentication is employed for user authentication, protecting data access.
-React Router: Handles in-app routing, allowing for seamless navigation within a single-page application.
-CryptoJS: CryptoJS library is used for encrypting note contents on the client side, enhancing data security.
-Conclusion:
+- **Note Management**: Create, edit, and delete text notes.
+- **Color Tagging**: Assign color tags to notes for easy identification.
+- **Calendar View**: A calendar interface to select dates for notes.
+- **Color-coded Notes**: Visualize notes on the calendar with assigned color
+  tags.
+- **Data Encryption**: Encrypt note content for secure storage.
 
-The Calendar Notebook is a modern solution for managing personal notes and tasks with an intuitive interface and an enhanced level of data security. This project demonstrates profound knowledge in web development, covering both frontend and backend aspects, as well as experience with cloud databases and user authentication.
+## Technologies Used
+
+- **React.js**: The frontend is built using React.js to create an interactive
+  user interface.
+- **Styled-Components**: This project uses Styled-Components for component-level
+  styling encapsulation.
+- **Firebase Firestore**: Firestore from Firebase is used for real-time database
+  management of notes and color tags.
+- **Firebase Authentication**: Implements Firebase Authentication for user
+  authentication and data protection.
+- **React Router**: Utilizes React Router for SPA (Single Page Application)
+  navigation.
+- **CryptoJS**: CryptoJS is used for client-side encryption of note content to
+  ensure data privacy.
+
+## Conclusion
+
+The Calendar Notepad is a modern solution for managing personal notes and tasks
+with an intuitive interface and enhanced data security. This project showcases
+profound web development skills, including both frontend and backend aspects, as
+well as experience with cloud databases and authentication.
