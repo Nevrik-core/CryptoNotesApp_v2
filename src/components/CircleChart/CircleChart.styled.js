@@ -102,7 +102,13 @@ export const AdjustmentsWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 80px;
+  padding-bottom: 30px;
   top: 50%;
+  
+  input[type="color"],
+  input[type="number"] {
+            border-radius: 5px;
+        }
   @media (max-width: 768px) {
     margin: 0;
     input[type="color"] {
