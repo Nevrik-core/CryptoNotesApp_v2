@@ -8,6 +8,7 @@ import EditNote from "components/EditNote/EditNote";
 import { updateNote, fetchNotes } from "../services/firebase/notes";
 import { FiLogOut } from "react-icons/fi";
 import Calendar from "components/Calendar/Calendar";
+import CircleChart from "components/CircleChart/CircleChart";
 
 
 import { Navbar, BottomMenu, BottomStyledNavLink, TopStyledNavLink, SignOutButton, ContentContainer } from "./HomePage.styled";
@@ -34,7 +35,7 @@ export const HomePage = ({
       <BottomMenu>
         <BottomStyledNavLink to="/notes"><TbNotes size={24} /></BottomStyledNavLink>
         <BottomStyledNavLink to="/calendar"><TbCalendarStar size={24} /></BottomStyledNavLink>
-        <BottomStyledNavLink to="/settings"><TbSettings size={24} /></BottomStyledNavLink>
+        <BottomStyledNavLink to="/circle"><TbSettings size={24} /></BottomStyledNavLink>
       </BottomMenu>
 
       <Navbar>
@@ -78,6 +79,7 @@ export const HomePage = ({
             path="/edit/:noteId"
             element={<EditNote notes={notes} onUpdate={handleNoteUpdated} />}
           />
+          <Route path="/circle" element={<CircleChart />} />
         </Routes>
       </ContentContainer>
     </>
