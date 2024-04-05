@@ -127,15 +127,14 @@ const CircleChart = () => {
                     />
                     </Label>
     
-                    <Label>
-                    Колір:
+                    
                     <input
                         type="color"
                         value={sector.color}
                         onChange={(e) => handleColorChange(index, e.target.value)}
                         
                     />
-                    </Label>
+                   
                 </InputWrapper>
                 ))}
             </div>

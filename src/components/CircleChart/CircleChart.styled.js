@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 20px;
+  padding: 0 20px;
   gap: 20px; // Відстань між колонками
 
   @media (max-width: 768px) {
@@ -38,7 +38,7 @@ export const ControlsWrapper = styled.div`
     input[type="range"] {
       width: 100%; // Зменшуємо ширину до 60% від доступного простору
       margin: 0 auto; // Центруємо елементи
-      margin-top: 10px;
+      margin-top: 0;
       
     }
 
@@ -63,8 +63,8 @@ export const CustomCanvas = styled.canvas`
     position: relative;
     top: 0;
     left: 0;
-    width: 800px;
-    height: 800px;
+    width: 600px;
+    height: 600px;
     @media (max-width: 768px) {
         width: 320px;
         height: 320px;
@@ -86,8 +86,9 @@ export const StyleWrapper = styled.div`
 
 export const IttenImage = styled.img`
   position: absolute;
-  top: 15%;
-  right: 15%;
+  bottom: 7%;
+  right: 0.5%;
+  width: 150px;
   @media (max-width: 768px) {
         display: none;
 }
@@ -104,6 +105,11 @@ export const AdjustmentsWrapper = styled.div`
   top: 50%;
   @media (max-width: 768px) {
     margin: 0;
+    input[type="color"] {
+            height: 40px;
+            width: 100%;
+            border-radius: 10px;
+        }
   }
 `;
 
@@ -115,7 +121,7 @@ export const LegendWrapper = styled.div`
   right: 10%; // Adjust as needed
   background: white;
   border: 1px solid #000;
-  padding: 10px;
+  padding: 5px;
   @media (max-width: 768px) {
     display: none;
   }
@@ -126,7 +132,9 @@ export const LegendWrapper = styled.div`
 export const LegendItem = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  transform: scale(0.9);
+  font-size: 14px;
+  margin-bottom: 4px;
 `;
 
 export const ColorSwatch = styled.div`
@@ -140,6 +148,7 @@ export const ColorSwatch = styled.div`
 
 export const Label = styled.label`
     color: white;
+    font-size: 14px;
     @media (max-width: 768px) {
         font-size: 14px;
     }
@@ -147,7 +156,7 @@ export const Label = styled.label`
 `
 
 export const InputWrapper = styled.div`
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     input[type="color"] {
     width: 50px;
     height: 34px;
@@ -160,6 +169,16 @@ export const InputWrapper = styled.div`
     }
     @media (max-width: 768px) {
         margin-bottom: 10px;
+        input[type="color"] {
+            margin-left: 0;
+            width: 100%;
+        }
+        input[type="number"],
+        input[type="range"],
+        input[type="text"]   {
+        margin-right: 0px;
+        margin-bottom: 5px;
+    }
     }
 
 `
