@@ -8,19 +8,43 @@ import { Wrapper, CanvasWrapper, CustomCanvas, Label, ControlsWrapper, IttenImag
 
 const CircleChart = () => {
     const defaultColors = [
-    '#e33d32', '#c73e7e', '#444e99', '#2a6fb0',
-    '#46905d', '#8cb925', '#f9c633', '#f08e33'
+    '#f9c633', '#f08e33', '#e33d32', '#c73e7e',
+    '#444e99', '#2a6fb0', '#46905d', '#8cb925'
     ];
-  const [sectors, setSectors] = useState(Array.from({ length: 8 }, (_, i) => ({
-    divisions: 10, // Усім секторам дамо по 10 субсекторів для початку
-    color: defaultColors[i],
+    // const defaultColors = [
+    // '#e33d32', '#c73e7e', '#444e99', '#2a6fb0',
+    // '#46905d', '#8cb925', '#f9c633', '#f08e33'
+    // ];
+  const [sectors, setSectors] = useState(() => {
+  // Спробуйте отримати збережені сектори з localStorage або встановіть значення за замовчуванням
+  const savedSectors = localStorage.getItem('sectors');
+  return savedSectors ? JSON.parse(savedSectors) : Array.from({ length: 8 }, (_, i) => ({
+    divisions: 10, 
+    color: defaultColors[i], 
     name: `Сектор ${i + 1}`
-  })));
-  
-  const [backgroundColor, setBackgroundColor] = useState('#282728');
-  const [textColor, setTextColor] = useState('#282728');
-  const [borderColor, setBorderColor] = useState('#282728');
-  const [borderWidth, setBorderWidth] = useState(2);  
+  }));
+});
+
+const [backgroundColor, setBackgroundColor] = useState(() => {
+  // Отримайте збережений колір фону або встановіть значення за замовчуванням
+  return localStorage.getItem('backgroundColor') || '#282728';
+});
+
+const [textColor, setTextColor] = useState(() => {
+  // Отримайте збережений колір тексту або встановіть значення за замовчуванням
+  return localStorage.getItem('textColor') || '#FFFFFF'; // Змінено на #FFFFFF для кращої видимості
+});
+
+const [borderColor, setBorderColor] = useState(() => {
+  // Отримайте збережений колір обведення або встановіть значення за замовчуванням
+  return localStorage.getItem('borderColor') || '#282728';
+});
+
+const [borderWidth, setBorderWidth] = useState(() => {
+  // Отримайте збережену ширину обведення або встановіть значення за замовчуванням
+  const savedWidth = localStorage.getItem('borderWidth');
+  return savedWidth ? Number(savedWidth) : 2;
+});
   const canvasRef = useRef(null);
   const maxRadius = 200; // Максимальний радіус круга
   const divisionWidth = 20;  // Мінімальний радіус круга
@@ -29,10 +53,35 @@ const CircleChart = () => {
   
   
 
+  
+
+  useEffect(() => {
+  // Читання збережених даних при завантаженні компонента
+  const loadedSectors = JSON.parse(localStorage.getItem('sectors')) || sectors;
+  const loadedBackgroundColor = localStorage.getItem('backgroundColor') || '#282728';
+  const loadedBorderColor = localStorage.getItem('borderColor') || '#282728';
+  const loadedBorderWidth = localStorage.getItem('borderWidth') || '2';
+
+  // Оновлення стану компонента збереженими даними
+  setSectors(loadedSectors);
+  setBackgroundColor(loadedBackgroundColor);
+  setBorderColor(loadedBorderColor);
+  setBorderWidth(loadedBorderWidth);
+}, []);
+
+  useEffect(() => {
+    // Зберігання даних при їх зміні
+    localStorage.setItem('sectors', JSON.stringify(sectors));
+    localStorage.setItem('backgroundColor', backgroundColor);
+    localStorage.setItem('borderColor', borderColor);
+    localStorage.setItem('borderWidth', borderWidth);
+  }, [sectors, backgroundColor, borderColor, borderWidth]);
+    
+    
   useEffect(() => {
     drawChart();
-  }, [sectors, backgroundColor, borderWidth, borderColor]);
-
+  }, [sectors, backgroundColor, borderWidth, borderColor]);  
+    
   const drawChart = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -43,6 +92,15 @@ const CircleChart = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height); // Очищення canvas
     ctx.fillStyle = backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height); // Заливка фону
+
+    ctx.save(); // Збереження поточного стану контексту
+
+    // Переміщення початкової точки координат в центр канвасу
+    ctx.translate(centerX, centerY);
+    // Поворот на 45 градусів проти годинникової стрілки
+    ctx.rotate(-90 * Math.PI / 180);
+    // Повернення початкової точки координат назад
+    ctx.translate(-centerX, -centerY);
 
     sectors.forEach((sector, sectorIndex) => {
       const sectorAngle = 2 * Math.PI / sectors.length;
@@ -65,10 +123,9 @@ const CircleChart = () => {
         ctx.stroke();
       }
     });
-    
-    // Застосування кольору тексту
-    if (textRef.current) textRef.current.style.color = textColor;
-  };
+
+    ctx.restore(); // Відновлення стану контексту до збереженого, щоб не впливати на наступні операції малювання
+};
 
 
 
