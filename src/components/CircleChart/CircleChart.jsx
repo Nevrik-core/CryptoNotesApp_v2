@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import CircleType from 'circletype';
 import Draggable from 'react-draggable';
 
 import itten from './jpeg/itten.jpg'
-import { Wrapper, CanvasWrapper, CustomCanvas, Label, ControlsWrapper, IttenImage, StyleWrapper, AdjustmentsWrapper, LegendWrapper, LegendItem, ColorSwatch, InputWrapper } from './CircleChart.styled';
+import { Wrapper, CanvasWrapper, CustomCanvas, Label, ControlsWrapper, IttenImage, StyleWrapper, AdjustmentsWrapper, LegendWrapper, LegendItem, ColorSwatch, InputWrapper} from './CircleChart.styled';
 
 
 const CircleChart = () => {
@@ -11,12 +10,8 @@ const CircleChart = () => {
     '#f9c633', '#f08e33', '#e33d32', '#c73e7e',
     '#444e99', '#2a6fb0', '#46905d', '#8cb925'
     ];
-    // const defaultColors = [
-    // '#e33d32', '#c73e7e', '#444e99', '#2a6fb0',
-    // '#46905d', '#8cb925', '#f9c633', '#f08e33'
-    // ];
+   
   const [sectors, setSectors] = useState(() => {
-  // Спробуйте отримати збережені сектори з localStorage або встановіть значення за замовчуванням
   const savedSectors = localStorage.getItem('sectors');
   return savedSectors ? JSON.parse(savedSectors) : Array.from({ length: 8 }, (_, i) => ({
     divisions: 10, 
@@ -26,29 +21,23 @@ const CircleChart = () => {
 });
 
 const [backgroundColor, setBackgroundColor] = useState(() => {
-  // Отримайте збережений колір фону або встановіть значення за замовчуванням
   return localStorage.getItem('backgroundColor') || '#282728';
 });
 
-const [textColor, setTextColor] = useState(() => {
-  // Отримайте збережений колір тексту або встановіть значення за замовчуванням
-  return localStorage.getItem('textColor') || '#FFFFFF'; // Змінено на #FFFFFF для кращої видимості
-});
-
+  
+const [showNumbers, setShowNumbers] = useState(false);
+  
 const [borderColor, setBorderColor] = useState(() => {
-  // Отримайте збережений колір обведення або встановіть значення за замовчуванням
   return localStorage.getItem('borderColor') || '#282728';
 });
 
 const [borderWidth, setBorderWidth] = useState(() => {
-  // Отримайте збережену ширину обведення або встановіть значення за замовчуванням
   const savedWidth = localStorage.getItem('borderWidth');
   return savedWidth ? Number(savedWidth) : 2;
 });
   const canvasRef = useRef(null);
   const maxRadius = 200; // Максимальний радіус круга
   const divisionWidth = 20;  // Мінімальний радіус круга
-  const textRef = useRef(null); 
       
   
   
@@ -80,7 +69,7 @@ const [borderWidth, setBorderWidth] = useState(() => {
     
   useEffect(() => {
     drawChart();
-  }, [sectors, backgroundColor, borderWidth, borderColor]);  
+  }, [sectors, backgroundColor, borderWidth, borderColor, showNumbers]);  
     
   const drawChart = () => {
     const canvas = canvasRef.current;
@@ -121,6 +110,21 @@ const [borderWidth, setBorderWidth] = useState(() => {
         ctx.strokeStyle = borderColor;
         ctx.lineWidth = borderWidth;
         ctx.stroke();
+
+        if (showNumbers) {// Draw the numbers
+          const textRadius = innerRadius + (outerRadius - innerRadius) / 2;
+          const textAngle = startAngle + (endAngle - startAngle) / 2;
+          ctx.fillStyle = '#00000050'; 
+          ctx.font = "16px"; 
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.save();
+          ctx.translate(centerX, centerY);
+          ctx.rotate(textAngle);
+          ctx.fillText(i.toString(), textRadius, 0);
+          ctx.restore();
+        }
+        
       }
     });
 
@@ -128,7 +132,9 @@ const [borderWidth, setBorderWidth] = useState(() => {
 };
 
 
-
+   const toggleNumbersVisibility = () => {
+  setShowNumbers(prevShowNumbers => !prevShowNumbers);
+};
 
   const handleDivisionChange = (index, value) => {
     const updatedSectors = sectors.map((sector, i) => 
@@ -152,12 +158,17 @@ const [borderWidth, setBorderWidth] = useState(() => {
   setSectors(updatedSectors);
 };
 
+  
+
+
+  
   return (
     <Wrapper>  
       {/* Обгортка для повзунків і зображення */}
         <ControlsWrapper >
         {/* Блок з повзунками */}
             <div>
+                
                 {sectors.map((sector, index) => (
                 <InputWrapper key={index} >
                     <Label>
@@ -198,12 +209,7 @@ const [borderWidth, setBorderWidth] = useState(() => {
         </ControlsWrapper>
         <CanvasWrapper>
             <CustomCanvas ref={canvasRef} width="700" height="700" />
-            {/* <TextControl ref={textRef} style={{ */}
-                
-                {/* color: textColor // Застосуваня кольору тексту */}
-            {/* }}> */}
-                {/* | Сектfssdfор 1  |  Сектdsfsdfор 2   |  Сектfsdfdfsdор 3   |   Секfsdfsтор 4 | Секdsafsdfтор 5 | Сеdasfdfктор 6 | Секfsdfsdfтор 7 | Секfsdfsdfтор8    */}
-            {/* </TextControl> */}
+            
         </CanvasWrapper> 
         <StyleWrapper>
             {/* Зображення справа від блоку з повзунками */}
@@ -218,6 +224,8 @@ const [borderWidth, setBorderWidth] = useState(() => {
                 <span style={{ color: '#FFFFFF' }}>Ширина обведення</span>
                 <input type="range" value={borderWidth} onChange={e => setBorderWidth(e.target.value)} min="0" max="24" style={{ marginTop: '10px' }}/> 
                 <input type="number" value={borderWidth} onChange={e => setBorderWidth(e.target.value)} min="0" max="24" /> 
+                <span style={{ color: '#FFFFFF' }}>Показати цифри</span>
+                <input type="checkbox" checked={showNumbers} onChange={toggleNumbersVisibility} style={{ marginLeft: '10px' }} />
                  
             </AdjustmentsWrapper>    
         </StyleWrapper>
